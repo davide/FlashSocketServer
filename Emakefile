@@ -1,0 +1,9 @@
+{"src/tcp_listener.erl", [{outdir, "./ebin"}]}.
+{"src/tcp_server.erl", [{outdir, "./ebin"}]}.
+{"src/tcp_server_fsm.erl", [{outdir, "./ebin"}]}.
+{"src/tcp_server_light.erl", [{outdir, "./ebin"}]}.
+{"src/flash_socket_server_app.erl", [{outdir, "./ebin"}]}.
+{"src/flash_socket_server.erl", [{outdir, "./ebin"}]}.
+{"src/flash_policy_fsm_handler.erl", [{outdir, "./ebin"}]}.
+{"src/flash_socket_fsm_handler.erl", [{outdir, "./ebin"}]}.
+{"src/flash_socket_light_handler.erl", [{outdir, "./ebin"}]}.

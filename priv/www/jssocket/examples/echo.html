@@ -1,0 +1,43 @@
+<html>
+<head>
+	<title>jsSocket example: echo</title>
+	<script type="text/javascript" src="../js/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.media.js"></script>
+	<script type="text/javascript" src="../js/jsonStringify.js"></script>
+	<script type="text/javascript" src="../js/jsSocket.js"></script>
+</head>
+<body>
+	<h1>jsSocket example: echo</h1>
+
+	<form id="input">
+		<input id="input" type="text" />
+	</form>
+	
+	<div id="history"></div>
+
+	<script>
+		socket = jsSocket({ port: 5222,
+							 debug: true,
+							 logger: console.log,
+							 onData: function(data){
+							   $('#history').append(
+								$('<p/>').text(data)
+							   ).each(function(){
+								 this.scrollTop = this.scrollHeight
+							   }) 
+							 }
+						  })
+		$('#input').submit(function(){
+			try {
+				socket.send($(this).find('input').val())
+				alert($(this).find('input').val())
+			}
+			catch (e) {
+				alert(e)
+			}
+			return false
+		})
+	</script>
+	
+</body>
+</html>

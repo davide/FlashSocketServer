@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>JsSocket Test</title>
+
+	<script src="jquery.js" language="javascript"></script>
+	<script src="swfobject.js" language="javascript"></script>
+
+	<script>
+		var _jssocket = null;
+
+		$(function() 
+		{
+			var so = new SWFObject("JsSocket.swf", "mymovie", "470", "200", "8", "#FFFFFF");
+			so.addParam("allowScriptAccess", "always");
+			so.write("flashcontent");
+
+			$(".send, #disconnect").attr("disabled","disabled");
+
+			$("#connect").click(function()
+			{
+				if(_jssocket != null)
+				{
+					_jssocket.connect($("#ip").val(),$("#port").val());
+					$("#messages").append("Connecting<br />\n");
+				}
+			});
+
+			$("#disconnect").click(function()
+			{
+				_jssocket.disconnect();
+			});
+
+			$("#send").click(function()
+			{
+				_jssocket.write($("#message").val()+"<br />\n");
+				$("#message").val("");
+			});
+
+			
+		});
+
+		function jssocket_init()
+		{
+			// This is the id/name of the flash object
+			_jssocket = document.getElementById("mymovie");
+		
+			// Set callbacks for flash to call
+			_jssocket.setCallBack("connect","soc_connect");
+			_jssocket.setCallBack("disconnect","soc_closed");
+			_jssocket.setCallBack("recieve","soc_msg");
+			_jssocket.setCallBack("ioerror","soc_error");
+		}
+
+		// Called when socket connects
+		function soc_connect()
+		{
+			$("#connect").attr("disabled","disabled");
+			$(".send, #disconnect").attr("disabled","");
+			$("#messages").append("Socket Connected<br />\n");;
+		}
+
+		function soc_error()
+		{
+			$("#connect").attr("disabled","");
+			$("#messages").append("There was an error connecting<br />\n");;
+		}
+		
+		// Called when socket is closed
+		function soc_closed()
+		{
+			$(".send, #disconnect").attr("disabled","disabled");
+			$("#connect").attr("disabled","");
+			$("#messages").append("Socket Closed<br />\n");;
+		}
+		
+		// Called when socket receives message
+		function soc_msg(msg)
+		{
+			$("#messages").append("Recieved Message: "+msg);
+		}
+
+	</script>
+
+	<style>
+		* { 
+			margin:         0px;
+			padding:        0px;
+			font:           11px sans-serif; }
+		h1 { font: 24px sans-serif; }
+		h2 { margin-top: 30px; font: bold 16px sans-serif; }
+		h3 { font-weight:	bold; }
+		hr { margin-bottom: 4px; }
+		p { margin: 10px 0px; }
+		ul { margin-left: 30px; }			
+		input, textarea {
+			font:           11px Consolas, Monaco, Courier, monospace;
+			padding:        2px;
+			border:         1px solid #999; }
+		#showflash { margin: 3px; }
+		#container { 
+			padding:        20px;
+			background:     #FFF;
+			width:          600px;
+			margin:         0px auto; }
+		#messages { 
+			height:         200px; 
+			width:          100%; 
+			border:         1px solid #666; }
+	</style>
+</head>
+<body>
+	<div id="container">
+		<h1>Javascript Sockets</h1>
+		<hr />
+
+		<h2>Introduction</h2>
+		<p>Javascript Sockets use the Socket functionality available in
+		flash, and through an ExternalInterface with an swf embedded in a
+		page, provide the ability to program sockets with javascript</p>
+		
+		<h2>Project</h2>
+		<ul>
+			<li><p>Google Code: <a href="http://code.google.com/p/jssockets/">
+			http://code.google.com/p/jssockets/</a></p></li>
+		</ul>
+				
+
+		<h2>Example</h2>
+		<p>This is the IP and Port that you want to connect to<br />
+			<input type="text" id="ip" value="127.0.0.1" />
+			<input type="text" id="port" value="5222" />
+			<button id="connect">Connect</button>
+			<button id="disconnect">Disconnect</button><br />
+		</p>
+
+		<p>Type in a message and click send to send these message to the server. type 'quit' 
+			and the server will close the connection.<br />
+			<input type="text" id="message" value="" class="send" /> 
+			<button id="send" class="send" >Send</button>
+		</p>
+
+		<textarea id="messages" readonly="readonly"></textarea>
+
+		<br /><br /><h3>Flash (usually hidden)</h3><hr />
+		<div id="flashcontent">
+			This text is replaced by the Flash movie.
+		</div>
+	</div>
+</body>
+</html>

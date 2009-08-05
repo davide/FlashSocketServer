@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<script type="text/javascript" src="XMLSocket.js"></script>
+		<script>
+		
+		updateStatus = function(update) {
+			document.getElementById('status').innerHTML += update + '<br/>';
+		};
+		
+		// just an example
+		var connected = false;
+		onload = function() {
+			var xmls = new XMLSocket();
+			xmls.init("xmlsocket-div");
+			
+			// if you need to connect directly use a delay
+			// function because swf that's will be add
+			// inside div should be totally downloaded.
+			// Max 700 bytes of swf requires
+			// about 1 or 2 seconds to be downloaded.
+			function connect() {
+				updateStatus('connecting...');
+				xmls.onConnect = function(success) {
+					updateStatus('connected!');
+					if(success) {
+						connected = true;
+						updateStatus('sending data...');
+						xmls.send('hello world!');
+					}
+				};
+				xmls.onData = function(text) {
+					updateStatus('Got data from the server: ' + text);
+				};
+				xmls.onClose = function() {
+					updateStatus("server has gone away");
+				};
+				xmls.connect('localhost', 5222);
+			};
+			setTimeout(connect, 1500);
+		};
+		</script>
+	</head>
+	<body>
+		<h1><a href="../">Flash Socket Implementations</a> &gt; XMLSocket</h1>
+		<div id="xmlsocket-div"></div>
+		<hr/>
+		<h3>Status:</h3>
+		<div id="status"></div>
+		<hr/>
+		<h3>Project:</h3>
+		<p>Page: <a href="http://www.devpro.it/xmlsocket/">http://www.devpro.it/xmlsocket/</a></p>
+		<iframe width="100%" height="800px" src="http://www.devpro.it/xmlsocket/"></iframe>
+	</body>
+</html>
